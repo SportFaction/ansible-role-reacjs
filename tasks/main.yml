@@ -1,15 +1,15 @@
 ---
 
 - include: 00-git.yml
-- include: 10-yarn.yml
 
 - name: install packages
   shell: |
     cd {{ project_root }}
-    yarn install
+    npm install
+    npm run build
 
 - name: starting project
   shell: |
     cd {{ project_root }}
-    yarn global add serve
+    npm install -g serve
     serve -s build
