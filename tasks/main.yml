@@ -2,14 +2,17 @@
 
 - include: 00-git.yml
 
+- name: isntall pm2
+  shell: |
+    npm install pm2@latest -g
+
 - name: install packages
   shell: |
     cd {{ project_root }}
-    npm install
+    yarn install
     npm run build
 
 - name: starting project
   shell: |
     cd {{ project_root }}
-    npm install -g serve
-    serve -s build
+    pm2 start server/index.js
