@@ -1,0 +1,49 @@
+---
+
+- name: "Yarn | GPG"
+  apt_key:
+    url: https://dl.yarnpkg.com/debian/pubkey.gpg
+    state: present
+
+- name: "Yarn | Ensure sources list file exists"
+  file:
+    path: /etc/apt/sources.list.d/yarn.list
+    owner: root
+    mode: 0644
+    state: touch
+
+- name: "Yarn | Ensure package is in sources list"
+  lineinfile:
+    dest: /etc/apt/sources.list.d/yarn.list
+    regexp: 'deb http://dl.yarnpkg.com/debian/ stable main'
+    line: 'deb http://dl.yarnpkg.com/debian/ stable main'
+    state: present
+
+- name: "Yarn | Update APT cache"
+  apt:
+    update_cache: yes
+
+- name: "Yarn | Install"
+  package:
+    name: yarn
+    state: latest
+
+- name: "Yarn | Configure shell profiles"
+  lineinfile:
+    dest: "/home/{{ yarn_user }}/{{ item }}"
+    regexp: "PATH:{{ yarn_global_path }}/bin"
+    line:  'export PATH="$PATH:{{ yarn_global_path }}/bin";'
+    state: present
+  failed_when: false
+  with_items:
+    - "{{ yarn_shell_profiles }}"
+
+- name: "Yarn | Ensure installed"
+  shell: "which yarn"
+
+- name: "Yarn | Update as required"
+  become: yes
+  become_user: "{{ yarn_user }}"
+  shell: "yarn self-update {{ yarn_version | default() }}"
+  when: 'yarn_update == true'
+  failed_when: false
