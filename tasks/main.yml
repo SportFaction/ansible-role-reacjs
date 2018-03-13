@@ -4,13 +4,13 @@
 
 - name: isntall pm2
   shell: |
-    npm install pm2@latest -g
+    sudo npm install pm2@latest -g
 
 - name: install packages
   shell: |
     cd {{ project_root }}
-    yarn install
-    npm run build
+    sudo yarn install
+    sudo npm run build
 
 - name: starting project
   shell: |
