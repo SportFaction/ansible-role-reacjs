@@ -19,3 +19,9 @@
   shell: |
     cd {{ project_root }}
     pm2 start server/index.js
+
+- name: Create global htpasswd file
+  htpasswd:
+    path: /etc/nginx/htpasswd.users
+    name: "{{ htpasswd_username }}"
+    password: "{{ htpasswd_password }}"
