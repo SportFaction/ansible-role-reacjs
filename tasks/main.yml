@@ -20,6 +20,10 @@
     cd {{ project_root }}
     pm2 start server/index.js
 
+- apt: "name={{ item }} state=installed"
+  with_items:
+    - python-passlib
+
 - name: Create global htpasswd file
   htpasswd:
     path: /etc/nginx/htpasswd.users
