@@ -3,17 +3,19 @@
 - include: 00-git.yml
 - include: 10-yarn.yml
 
-- name: isntall pm2
-  shell: |
-    sudo npm install pm2@latest -g
+- name: Install pm2
+  npm:
+    name: pm2
+    global: yes
 
-- name: install packages
+- name: Install packages and run build
   shell: |
     cd {{ project_root }}
-    sudo yarn install
-    sudo npm run build
+    yarn install
+    npm run build
+  become: true
 
-- name: starting project
+- name: Starting project
   shell: |
     cd {{ project_root }}
     pm2 start server/index.js
