@@ -16,9 +16,8 @@
   become: true
 
 - name: Starting project
-  shell: |
-    cd {{ project_root }}
-    pm2 start server/index.js
+  shell: pm2 start {{ project_root }}/server/index.js
+  become: true
 
 - apt: "name={{ item }} state=installed"
   with_items:
