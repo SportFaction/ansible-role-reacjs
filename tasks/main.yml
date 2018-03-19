@@ -18,13 +18,3 @@
 - name: Starting project
   shell: pm2 start {{ project_root }}/server/index.js
   become: true
-
-- apt: "name={{ item }} state=installed"
-  with_items:
-    - python-passlib
-
-- name: Create global htpasswd file
-  htpasswd:
-    path: /etc/nginx/htpasswd.users
-    name: "{{ htpasswd_username }}"
-    password: "{{ htpasswd_password }}"
