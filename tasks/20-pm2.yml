@@ -26,8 +26,6 @@
 - name: Install pm2-logrotate
   shell:  pm2 install pm2-logrotate
   become: false
-  args:
-    chdir: "{{ deploy_dir }}"
 
 - name: Start PM2 using ecosystem.yml
   shell: pm2 start {{ project_root }}/server/index.js
