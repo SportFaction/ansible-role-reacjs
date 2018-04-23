@@ -1,0 +1,44 @@
+---
+- name: Install pm2 package
+  npm:
+    name: "{{ item }}"
+    global: yes
+    state: present
+  become: true
+  with_items:
+    - pm2
+    - pm2-logrotate
+    - pmx
+
+- name: Ensure pm2 is not running
+  command: pm2 kill
+  become: false
+
+- name: Remove stuff from .pm2 directory
+  file: path=/home/{{ ansible_user }}/.pm2/{{ item }} state=absent
+  become: false
+  with_items:
+    - dump.pm2
+    - pm2.log
+    - pm2.pid
+    - touch
+
+- name: Install pm2-logrotate
+  shell:  pm2 install pm2-logrotate
+  become: false
+  args:
+    chdir: "{{ deploy_dir }}"
+
+- name: Start PM2 using ecosystem.yml
+  shell: pm2 start {{ project_root }}/server/index.js
+  become: false
+
+- name: Set PM2 to start on reboot
+  shell: pm2 startup systemd -u {{ ansible_user }} --hp /home/{{ ansible_user }}
+  become: true
+
+- name: Save PM2
+#  shell: pm2 save -u {{ ansible_user }} --hp /home/{{ ansible_user }}
+  shell: pm2 save
+  become: false
+

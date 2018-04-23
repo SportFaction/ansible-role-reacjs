@@ -2,12 +2,6 @@
 
 - include: 00-git.yml
 - include: 10-yarn.yml
-
-- name: Install pm2
-  npm:
-    name: pm2
-    global: yes
-
 - name: Install packages and run build
   shell: |
     cd {{ project_root }}
@@ -15,6 +9,4 @@
     npm run build
   become: true
 
-- name: Starting project
-  shell: pm2 start {{ project_root }}/server/index.js
-  become: true
+- include: 20-pm2.yml
