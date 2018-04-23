@@ -7,7 +7,7 @@
   become: true
   with_items:
     - pm2
-    - pm2-logrotate
+    # - pm2-logrotate
     - pmx
 
 - name: Ensure pm2 is not running
@@ -23,11 +23,11 @@
     - pm2.pid
     - touch
 
-- name: Install pm2-logrotate
-  shell:  pm2 install pm2-logrotate
-  become: false
+# - name: Install pm2-logrotate
+#   shell:  pm2 install pm2-logrotate
+#   become: false
 
-- name: Start PM2 using ecosystem.yml
+- name: Start PM2
   shell: pm2 start {{ project_root }}/server/index.js
   become: false
 
