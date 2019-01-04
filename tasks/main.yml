@@ -16,4 +16,5 @@
   shell: |
     cd {{ project_root }}
     yarn install
+    yarn build
 
