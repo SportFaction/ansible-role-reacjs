@@ -2,11 +2,15 @@
 
 - include: 00-git.yml
 - include: 10-yarn.yml
+
+
+- name: Give permissions
+  shell: |
+    chown -R ubuntu:ubuntu {{ project_root }}
+
 - name: Install packages and run build
   shell: |
     cd {{ project_root }}
     yarn install
-    npm run build
-  become: true
+    yarn build
 
-- include: 20-pm2.yml
